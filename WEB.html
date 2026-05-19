@@ -98,7 +98,7 @@
             font-weight: bold;
         }
 
-        /* Account Dropdown Menu - FIXED VISIBILITY */
+        /* Account Dropdown Menu */
         .account-dropdown {
             position: absolute;
             top: 45px;
@@ -611,14 +611,80 @@
             background: #ffa41c;
         }
 
+        /* ============================================ */
+        /* MOBILE FIX FOR LOGIN MODAL - ADDED */
+        /* ============================================ */
         @media (max-width: 768px) {
             .detail-grid {
                 grid-template-columns: 1fr;
                 gap: 20px;
             }
+            
+            .amazon-auth-modal {
+                align-items: flex-start;
+                padding-top: 30px;
+            }
+            
             .amazon-auth-card {
                 max-width: 95%;
-                margin: 10px;
+                width: 95%;
+                margin: 0 auto;
+                max-height: 85vh;
+                overflow-y: auto;
+                border-radius: 16px;
+            }
+            
+            .amazon-auth-inner {
+                padding: 15px 20px;
+            }
+            
+            .amazon-auth-title {
+                font-size: 24px;
+                margin-bottom: 15px;
+            }
+            
+            .amazon-input-group {
+                margin-bottom: 15px;
+            }
+            
+            .amazon-input-group input {
+                padding: 12px;
+                font-size: 16px;
+            }
+            
+            .amazon-btn, .amazon-social-btn {
+                padding: 12px;
+                font-size: 15px;
+            }
+            
+            .close-auth-x {
+                top: 10px;
+                right: 15px;
+                font-size: 28px;
+            }
+            
+            .account-dropdown {
+                right: -20px;
+                min-width: 260px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .amazon-auth-card {
+                max-height: 90vh;
+            }
+            
+            .amazon-auth-inner {
+                padding: 12px 16px;
+            }
+            
+            .amazon-auth-title {
+                font-size: 22px;
+            }
+            
+            .amazon-input-group input {
+                padding: 10px;
+                font-size: 14px;
             }
         }
 
