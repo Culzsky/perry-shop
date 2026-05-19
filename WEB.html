@@ -98,22 +98,17 @@
             font-weight: bold;
         }
 
-        /* Account Dropdown Menu - COMPLETELY FIXED */
-        .user-icon {
-            position: relative;
-        }
-
+        /* Account Dropdown Menu - FIXED */
         .account-dropdown {
             position: absolute;
-            top: 100%;
+            top: 40px;
             right: 0;
             background: white;
-            min-width: 280px;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-            z-index: 9999;
+            min-width: 220px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 10000;
             display: none;
-            overflow: visible;
         }
 
         .account-dropdown.show {
@@ -121,21 +116,21 @@
         }
 
         .dropdown-header {
-            padding: 16px;
-            background: #f7f7f7;
+            padding: 12px 16px;
+            background: #f5f5f5;
             border-bottom: 1px solid #eee;
-            border-radius: 12px 12px 0 0;
+            border-radius: 8px 8px 0 0;
         }
 
         .dropdown-header .user-email {
-            font-size: 14px;
-            color: #333;
+            font-size: 12px;
+            color: #666;
             word-break: break-all;
         }
 
         .dropdown-header .user-name {
             font-weight: bold;
-            font-size: 16px;
+            font-size: 14px;
             margin-bottom: 4px;
             color: #111;
         }
@@ -146,7 +141,7 @@
             transition: background 0.2s;
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
             border-bottom: 1px solid #f0f0f0;
             color: #111;
             font-size: 14px;
@@ -158,14 +153,13 @@
         }
 
         .dropdown-item .icon {
-            font-size: 18px;
+            font-size: 16px;
             width: 24px;
         }
 
         .signout-item {
             color: #c00;
-            border-top: 1px solid #eee;
-            border-radius: 0 0 12px 12px;
+            border-radius: 0 0 8px 8px;
         }
 
         .container {
@@ -294,7 +288,6 @@
             max-width: 380px;
             border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-            animation: modalFadeIn 0.2s ease-out;
             position: relative;
         }
 
@@ -343,7 +336,6 @@
             border: 1px solid #a6a6a6;
             border-radius: 4px;
             font-size: 14px;
-            transition: all 0.2s;
         }
 
         .amazon-input-group input:focus {
@@ -362,7 +354,6 @@
             font-weight: bold;
             cursor: pointer;
             margin-bottom: 15px;
-            transition: 0.2s;
         }
 
         .amazon-btn:hover {
@@ -372,10 +363,6 @@
         .amazon-btn-secondary {
             background: #e7e9ec;
             border: 1px solid #adb1b8;
-        }
-
-        .amazon-btn-secondary:hover {
-            background: #e0e2e6;
         }
 
         .amazon-divider {
@@ -421,7 +408,6 @@
             justify-content: center;
             gap: 10px;
             font-size: 14px;
-            transition: 0.2s;
         }
 
         .amazon-social-btn:hover {
@@ -433,16 +419,6 @@
             color: #555;
             text-align: center;
             margin-top: 20px;
-        }
-
-        .amazon-footer-text a {
-            color: #0066c0;
-            text-decoration: none;
-        }
-
-        .amazon-footer-text a:hover {
-            text-decoration: underline;
-            color: #c45500;
         }
 
         .amazon-switch-mode {
@@ -460,11 +436,6 @@
             font-size: 13px;
         }
 
-        .amazon-switch-mode button:hover {
-            text-decoration: underline;
-            color: #c45500;
-        }
-
         .close-auth-x {
             position: absolute;
             top: 15px;
@@ -474,21 +445,6 @@
             color: #666;
             background: none;
             border: none;
-        }
-
-        .close-auth-x:hover {
-            color: #000;
-        }
-
-        @keyframes modalFadeIn {
-            from {
-                opacity: 0;
-                transform: scale(0.95);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
         }
 
         .product-detail-modal {
@@ -618,59 +574,18 @@
             background: #ffa41c;
         }
 
-        /* Mobile Fix */
         @media (max-width: 768px) {
             .detail-grid {
                 grid-template-columns: 1fr;
                 gap: 20px;
             }
-            
-            .amazon-auth-modal {
-                align-items: flex-start;
-                padding-top: 30px;
-            }
-            
             .amazon-auth-card {
                 max-width: 95%;
-                width: 95%;
-                margin: 0 auto;
-                max-height: 85vh;
-                overflow-y: auto;
-                border-radius: 16px;
+                margin: 10px;
             }
-            
-            .amazon-auth-inner {
-                padding: 15px 20px;
-            }
-            
-            .amazon-auth-title {
-                font-size: 24px;
-                margin-bottom: 15px;
-            }
-            
-            .amazon-input-group {
-                margin-bottom: 15px;
-            }
-            
-            .amazon-input-group input {
-                padding: 12px;
-                font-size: 16px;
-            }
-            
-            .amazon-btn, .amazon-social-btn {
-                padding: 12px;
-                font-size: 15px;
-            }
-            
-            .close-auth-x {
-                top: 10px;
-                right: 15px;
-                font-size: 28px;
-            }
-            
             .account-dropdown {
                 right: -10px;
-                min-width: 250px;
+                min-width: 200px;
             }
         }
 
@@ -816,10 +731,10 @@
                     <div class="user-name" id="dropdownUserName">Guest</div>
                     <div class="user-email" id="dropdownUserEmail">Not signed in</div>
                 </div>
-                <div class="dropdown-item" onclick="openAuthModal()">
+                <div class="dropdown-item" id="signInBtn">
                     <span class="icon">🔐</span> Sign In / Create Account
                 </div>
-                <div class="dropdown-item signout-item" onclick="signOut()" id="signoutBtn" style="display: none;">
+                <div class="dropdown-item signout-item" id="signoutBtn" style="display: none;">
                     <span class="icon">🚪</span> Sign Out
                 </div>
             </div>
@@ -866,7 +781,6 @@
     <div class="amazon-auth-card">
         <button class="close-auth-x" onclick="closeAuthModal()">✕</button>
         <div class="amazon-auth-inner" id="authFormContainer">
-            <!-- Login Form -->
             <div id="loginForm">
                 <div class="amazon-auth-logo">
                     <h2>🛍️ Perry's</h2>
@@ -889,7 +803,6 @@
                     <span>New to Perry's?</span>
                 </div>
                 <button class="amazon-btn amazon-btn-secondary" onclick="switchToRegister()">Create your Perry's account</button>
-                
                 <div class="amazon-divider">
                     <span>Or sign in with</span>
                 </div>
@@ -902,8 +815,6 @@
                     </button>
                 </div>
             </div>
-
-            <!-- Register Form -->
             <div id="registerForm" style="display: none;">
                 <div class="amazon-auth-logo">
                     <h2>🛍️ Perry's</h2>
@@ -957,18 +868,43 @@
     let products = [];
     let selectedProduct = null;
     
-    // Dropdown toggle
+    // DROPDOWN MENU - SIMPLE FIX
     const userIcon = document.getElementById('userIcon');
     const dropdown = document.getElementById('accountDropdown');
+    const signInBtn = document.getElementById('signInBtn');
+    const signoutBtn = document.getElementById('signoutBtn');
     
-    userIcon.addEventListener('click', (e) => {
-        e.stopPropagation();
-        dropdown.classList.toggle('show');
+    // Toggle dropdown when clicking Guest
+    if (userIcon && dropdown) {
+        userIcon.addEventListener('click', function(e) {
+            e.stopPropagation();
+            if (dropdown.style.display === 'block') {
+                dropdown.style.display = 'none';
+            } else {
+                dropdown.style.display = 'block';
+            }
+        });
+    }
+    
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function() {
+        if (dropdown) dropdown.style.display = 'none';
     });
     
-    document.addEventListener('click', () => {
-        dropdown.classList.remove('show');
-    });
+    // Prevent closing when clicking inside dropdown
+    if (dropdown) {
+        dropdown.addEventListener('click', function(e) {
+            e.stopPropagation();
+        });
+    }
+    
+    // Sign In button click
+    if (signInBtn) {
+        signInBtn.addEventListener('click', function() {
+            dropdown.style.display = 'none';
+            openAuthModal();
+        });
+    }
     
     function showToast(msg) {
         const toast = document.createElement('div');
@@ -978,7 +914,6 @@
         setTimeout(() => toast.remove(), 2500);
     }
     
-    // Auth Modal Functions
     function openAuthModal() {
         document.getElementById('authModal').style.display = 'flex';
     }
@@ -1084,12 +1019,14 @@
             document.getElementById('userName').textContent = displayName;
             document.getElementById('dropdownUserName').textContent = displayName;
             document.getElementById('dropdownUserEmail').textContent = currentUser.email;
-            document.getElementById('signoutBtn').style.display = 'flex';
+            if (signInBtn) signInBtn.style.display = 'none';
+            if (signoutBtn) signoutBtn.style.display = 'flex';
         } else {
             document.getElementById('userName').textContent = 'Guest';
             document.getElementById('dropdownUserName').textContent = 'Guest';
             document.getElementById('dropdownUserEmail').textContent = 'Not signed in';
-            document.getElementById('signoutBtn').style.display = 'none';
+            if (signInBtn) signInBtn.style.display = 'flex';
+            if (signoutBtn) signoutBtn.style.display = 'none';
         }
     }
     
@@ -1099,11 +1036,14 @@
             updateUserDropdown();
             updateCartCount();
             showToast('Signed out successfully');
-            dropdown.classList.remove('show');
+            if (dropdown) dropdown.style.display = 'none';
         }).catch(e => showToast('Error signing out'));
     }
     
-    // Product Functions
+    if (signoutBtn) {
+        signoutBtn.addEventListener('click', signOut);
+    }
+    
     async function loadProducts() {
         try {
             const snapshot = await db.collection('products').get();
@@ -1112,9 +1052,7 @@
                 const data = doc.data();
                 products.push({ id: doc.id, ...data });
             });
-            
             document.getElementById('productCount').textContent = products.length;
-            
             if (products.length === 0) {
                 document.getElementById('productsGrid').innerHTML = '<div class="loading">📦 No products yet. Add them in Firebase Console!</div>';
                 return;
@@ -1138,7 +1076,6 @@
             const buttonClass = isInStock ? 'btn-add' : 'btn-add btn-add-disabled';
             const buttonText = isInStock ? 'Add to Cart' : 'Out of Stock';
             const buttonOnClick = isInStock ? `addToCart('${p.id}')` : '';
-            
             return `
             <div class="product-card" onclick="showProductDetail('${p.id}')">
                 <img src="${imageUrl}" alt="${p.name}" onerror="this.src='https://via.placeholder.com/300x300?text=Product+Image'">
@@ -1155,19 +1092,16 @@
         const product = products.find(p => p.id === productId);
         if (!product) return;
         selectedProduct = product;
-        
         const imageUrl = product.image || 'https://via.placeholder.com/300x300?text=No+Image';
         const rating = product.rating || 4;
         const fullStars = Math.floor(rating);
         const hasHalf = rating % 1 !== 0;
         let starsHtml = '★'.repeat(fullStars) + (hasHalf ? '½' : '') + '☆'.repeat(5 - fullStars - (hasHalf ? 1 : 0));
-        
         const originalPriceHtml = product.originalPrice ? `<span class="detail-original-price">$${product.originalPrice.toFixed(2)}</span>` : '';
-        const descriptionHtml = product.description || 'No description available for this product.';
+        const descriptionHtml = product.description || 'No description available.';
         const isInStock = product.inStock === true;
         const stockHtml = isInStock ? '<span class="detail-stock detail-stock-in">✓ In Stock</span>' : '<span class="detail-stock detail-stock-out">✗ Out of Stock</span>';
         const quantitySelectHtml = isInStock ? `<div class="detail-quantity"><span>Quantity:</span><select id="detailQuantity"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></div>` : '';
-        
         document.getElementById('detailContent').innerHTML = `
             <div class="detail-image"><img src="${imageUrl}" alt="${product.name}"></div>
             <div class="detail-info">
