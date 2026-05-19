@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Perry's Online Shop | Amazon Style</title>
+    <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
@@ -860,7 +861,7 @@
 </div>
 
 <script>
-    // Firebase Configuration
+    // ========== FIREBASE CONFIGURATION ==========
     const firebaseConfig = {
         apiKey: "AIzaSyCVgQSTC_YJHYvNBQL4vi-TgIlxdrj6A80",
         authDomain: "perrysshopping-b316c.firebaseapp.com",
@@ -878,32 +879,24 @@
     let products = [];
     let selectedProduct = null;
     
-    // DROPDOWN MENU
+    // ========== DOM ELEMENTS ==========
     const userIcon = document.getElementById('userIcon');
     const dropdown = document.getElementById('accountDropdown');
     const signInBtn = document.getElementById('signInBtn');
     const signoutBtn = document.getElementById('signoutBtn');
     
+    // ========== DROPDOWN TOGGLE ==========
     if (userIcon && dropdown) {
         userIcon.addEventListener('click', function(e) {
             e.stopPropagation();
             dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
         });
     }
+    document.addEventListener('click', function() { if (dropdown) dropdown.style.display = 'none'; });
+    if (dropdown) dropdown.addEventListener('click', function(e) { e.stopPropagation(); });
+    if (signInBtn) signInBtn.addEventListener('click', function() { dropdown.style.display = 'none'; openAuthModal(); });
     
-    document.addEventListener('click', function() {
-        if (dropdown) dropdown.style.display = 'none';
-    });
-    if (dropdown) {
-        dropdown.addEventListener('click', function(e) { e.stopPropagation(); });
-    }
-    if (signInBtn) {
-        signInBtn.addEventListener('click', function() {
-            dropdown.style.display = 'none';
-            openAuthModal();
-        });
-    }
-    
+    // ========== HELPER FUNCTIONS ==========
     function showToast(msg) {
         const toast = document.createElement('div');
         toast.className = 'toast';
@@ -912,31 +905,22 @@
         setTimeout(() => toast.remove(), 2500);
     }
     
-    function openAuthModal() {
-        document.getElementById('authModal').style.display = 'flex';
-    }
-    
-    function closeAuthModal() {
-        document.getElementById('authModal').style.display = 'none';
-    }
-    
+    function openAuthModal() { document.getElementById('authModal').style.display = 'flex'; }
+    function closeAuthModal() { document.getElementById('authModal').style.display = 'none'; }
     function switchToRegister() {
         document.getElementById('loginForm').style.display = 'none';
         document.getElementById('registerForm').style.display = 'block';
     }
-    
     function switchToLogin() {
         document.getElementById('registerForm').style.display = 'none';
         document.getElementById('loginForm').style.display = 'block';
     }
     
+    // ========== EMAIL/PASSWORD LOGIN & REGISTER ==========
     async function login() {
         const email = document.getElementById('authEmail').value;
         const password = document.getElementById('authPassword').value;
-        if (!email || !password) {
-            showToast('Please enter email and password');
-            return;
-        }
+        if (!email || !password) { showToast('Please enter email and password'); return; }
         try {
             const userCredential = await auth.signInWithEmailAndPassword(email, password);
             currentUser = userCredential.user;
@@ -944,9 +928,7 @@
             showToast(`Welcome back, ${currentUser.email.split('@')[0]}!`);
             await updateCartCount();
             updateUserDropdown();
-        } catch(e) {
-            showToast('Login failed: ' + e.message);
-        }
+        } catch(e) { showToast('Login failed: ' + e.message); }
     }
     
     async function register() {
@@ -954,87 +936,45 @@
         const email = document.getElementById('regEmail').value;
         const password = document.getElementById('regPassword').value;
         const confirm = document.getElementById('regPasswordConfirm').value;
-        
-        if (!email || !password) {
-            showToast('Please enter email and password');
-            return;
-        }
-        if (password.length < 6) {
-            showToast('Password must be at least 6 characters');
-            return;
-        }
-        if (password !== confirm) {
-            showToast('Passwords do not match');
-            return;
-        }
-        
+        if (!email || !password) { showToast('Please enter email and password'); return; }
+        if (password.length < 6) { showToast('Password must be at least 6 characters'); return; }
+        if (password !== confirm) { showToast('Passwords do not match'); return; }
         try {
             const userCredential = await auth.createUserWithEmailAndPassword(email, password);
             currentUser = userCredential.user;
-            if (name) {
-                await currentUser.updateProfile({ displayName: name });
-            }
+            if (name) await currentUser.updateProfile({ displayName: name });
             closeAuthModal();
             showToast(`Account created! Welcome, ${name || email.split('@')[0]}!`);
             await updateCartCount();
             updateUserDropdown();
-        } catch(e) {
-            showToast('Registration error: ' + e.message);
-        }
+        } catch(e) { showToast('Registration error: ' + e.message); }
     }
     
-    // ========== GOOGLE SIGN IN (Works on Mobile & PC) ==========
+    // ========== SOCIAL LOGIN (Mobile-friendly with redirect) ==========
     async function signInWithGoogle() {
         const provider = new firebase.auth.GoogleAuthProvider();
         provider.setCustomParameters({ prompt: 'select_account' });
-        
         const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-        
         if (isMobile) {
-            // Use redirect for mobile (no popup blocking)
-            try {
-                await auth.signInWithRedirect(provider);
-            } catch(e) {
-                showToast('Redirect failed: ' + e.message);
-            }
+            await auth.signInWithRedirect(provider);
         } else {
-            // Use popup for desktop
             try {
                 const result = await auth.signInWithPopup(provider);
                 handleSuccessfulLogin(result.user);
-            } catch(e) {
-                if (e.code === 'auth/popup-blocked') {
-                    showToast('Popup blocked! Please allow popups for this site.');
-                } else {
-                    showToast('Google sign in failed: ' + e.message);
-                }
-            }
+            } catch(e) { showToast('Google sign in failed: ' + e.message); }
         }
     }
     
-    // ========== FACEBOOK SIGN IN (Works on Mobile & PC) ==========
     async function signInWithFacebook() {
         const provider = new firebase.auth.FacebookAuthProvider();
-        
         const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-        
         if (isMobile) {
-            try {
-                await auth.signInWithRedirect(provider);
-            } catch(e) {
-                showToast('Redirect failed: ' + e.message);
-            }
+            await auth.signInWithRedirect(provider);
         } else {
             try {
                 const result = await auth.signInWithPopup(provider);
                 handleSuccessfulLogin(result.user);
-            } catch(e) {
-                if (e.code === 'auth/popup-blocked') {
-                    showToast('Popup blocked! Please allow popups for this site.');
-                } else {
-                    showToast('Facebook sign in failed: ' + e.message);
-                }
-            }
+            } catch(e) { showToast('Facebook sign in failed: ' + e.message); }
         }
     }
     
@@ -1045,21 +985,15 @@
         showToast(`Welcome, ${displayName}!`);
         updateCartCount();
         updateUserDropdown();
+        setTimeout(() => location.reload(), 800);
     }
     
     // Handle redirect result (for mobile)
     auth.getRedirectResult().then((result) => {
-        if (result.user) {
-            handleSuccessfulLogin(result.user);
-        }
-    }).catch((error) => {
-        if (error.code !== 'auth/no-auth-event') {
-            console.error('Redirect error:', error);
-            showToast('Sign in failed: ' + error.message);
-        }
-    });
+        if (result.user) handleSuccessfulLogin(result.user);
+    }).catch((error) => { if (error.code !== 'auth/no-auth-event') console.error(error); });
     
-    // Attach event listeners to buttons
+    // Attach social login handlers
     document.getElementById('googleSignInBtn').addEventListener('click', signInWithGoogle);
     document.getElementById('facebookSignInBtn').addEventListener('click', signInWithFacebook);
     
@@ -1087,115 +1021,85 @@
             updateCartCount();
             showToast('Signed out successfully');
             if (dropdown) dropdown.style.display = 'none';
+            setTimeout(() => location.reload(), 500);
         }).catch(e => showToast('Error signing out'));
     }
+    if (signoutBtn) signoutBtn.addEventListener('click', signOut);
     
-    if (signoutBtn) {
-        signoutBtn.addEventListener('click', signOut);
-    }
+    // ========== AUTH STATE MONITOR ==========
+    auth.onAuthStateChanged(async (user) => {
+        currentUser = user;
+        if (user) {
+            document.getElementById('userName').textContent = user.displayName || user.email.split('@')[0];
+            await updateCartCount();
+            await db.collection('users').doc(user.uid).set({ email: user.email, name: user.displayName || user.email.split('@')[0], lastActive: new Date() }, { merge: true });
+            const snapshot = await db.collection('users').get();
+            document.getElementById('userCount').textContent = snapshot.size;
+        } else {
+            document.getElementById('cartCount').textContent = '0';
+        }
+        updateUserDropdown();
+    });
     
     // ========== PRODUCT FUNCTIONS ==========
     async function loadProducts() {
         try {
             const snapshot = await db.collection('products').get();
             products = [];
-            snapshot.forEach(doc => {
-                const data = doc.data();
-                products.push({ id: doc.id, ...data });
-            });
+            snapshot.forEach(doc => products.push({ id: doc.id, ...doc.data() }));
             document.getElementById('productCount').textContent = products.length;
-            if (products.length === 0) {
-                document.getElementById('productsGrid').innerHTML = '<div class="loading">📦 No products yet. Add them in Firebase Console!</div>';
-                return;
-            }
+            if (products.length === 0) { document.getElementById('productsGrid').innerHTML = '<div class="loading">📦 No products yet. Add them in Firebase Console!</div>'; return; }
             displayProducts(products);
-        } catch(e) {
-            console.error(e);
-            document.getElementById('productsGrid').innerHTML = '<div class="loading">❌ Error loading products.</div>';
-        }
+        } catch(e) { document.getElementById('productsGrid').innerHTML = '<div class="loading">❌ Error loading products.</div>'; }
     }
     
     function displayProducts(productList) {
         const grid = document.getElementById('productsGrid');
-        if (!productList.length) { 
-            grid.innerHTML = '<div class="loading">No products found</div>'; 
-            return; 
-        }
+        if (!productList.length) { grid.innerHTML = '<div class="loading">No products found</div>'; return; }
         grid.innerHTML = productList.map(p => {
             const imageUrl = p.image || 'https://via.placeholder.com/300x300?text=No+Image';
             const isInStock = p.inStock === true;
-            const buttonClass = isInStock ? 'btn-add' : 'btn-add btn-add-disabled';
-            const buttonText = isInStock ? 'Add to Cart' : 'Out of Stock';
-            const buttonOnClick = isInStock ? `addToCart('${p.id}')` : '';
             return `
             <div class="product-card" onclick="showProductDetail('${p.id}')">
                 <img src="${imageUrl}" alt="${p.name}" onerror="this.src='https://via.placeholder.com/300x300?text=Product+Image'">
                 <h3>${p.name}</h3>
                 <div class="price">$${(p.price || 0).toFixed(2)}</div>
                 ${p.originalPrice ? `<div style="text-decoration:line-through; color:#999; font-size:12px;">Was $${p.originalPrice.toFixed(2)}</div>` : ''}
-                <div style="color:#ffa41c; font-size:12px; margin: 5px 0;">${'★'.repeat(Math.floor(p.rating || 4))}${(p.rating || 4)%1?'½':''}</div>
-                <button class="${buttonClass}" onclick="event.stopPropagation(); ${buttonOnClick}">${buttonText}</button>
-            </div>
-        `}).join('');
+                <div style="color:#ffa41c; font-size:12px;">${'★'.repeat(Math.floor(p.rating || 4))}${(p.rating || 4)%1?'½':''}</div>
+                <button class="${isInStock ? 'btn-add' : 'btn-add btn-add-disabled'}" onclick="event.stopPropagation(); ${isInStock ? `addToCart('${p.id}')` : ''}">${isInStock ? 'Add to Cart' : 'Out of Stock'}</button>
+            </div>`;
+        }).join('');
     }
     
     function showProductDetail(productId) {
         const product = products.find(p => p.id === productId);
         if (!product) return;
         selectedProduct = product;
-        const imageUrl = product.image || 'https://via.placeholder.com/300x300?text=No+Image';
+        const imageUrl = product.image || 'https://via.placeholder.com/300x300';
         const rating = product.rating || 4;
-        const fullStars = Math.floor(rating);
-        const hasHalf = rating % 1 !== 0;
-        let starsHtml = '★'.repeat(fullStars) + (hasHalf ? '½' : '') + '☆'.repeat(5 - fullStars - (hasHalf ? 1 : 0));
-        const originalPriceHtml = product.originalPrice ? `<span class="detail-original-price">$${product.originalPrice.toFixed(2)}</span>` : '';
-        const descriptionHtml = product.description || 'No description available.';
+        const stars = '★'.repeat(Math.floor(rating)) + (rating%1?'½':'') + '☆'.repeat(5 - Math.ceil(rating));
         const isInStock = product.inStock === true;
-        const stockHtml = isInStock ? '<span class="detail-stock detail-stock-in">✓ In Stock</span>' : '<span class="detail-stock detail-stock-out">✗ Out of Stock</span>';
-        const quantitySelectHtml = isInStock ? `<div class="detail-quantity"><span>Quantity:</span><select id="detailQuantity"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></div>` : '';
         document.getElementById('detailContent').innerHTML = `
             <div class="detail-image"><img src="${imageUrl}" alt="${product.name}"></div>
             <div class="detail-info">
                 <h1>${product.name}</h1>
-                <div><span class="detail-stars">${starsHtml}</span> <span>${Math.floor(Math.random() * 10000 + 1000)} ratings</span></div>
-                <div class="detail-price">$${(product.price || 0).toFixed(2)} ${originalPriceHtml}</div>
-                ${stockHtml}
-                <div class="detail-description"><strong>About this item:</strong><br>${descriptionHtml}</div>
-                ${quantitySelectHtml}
+                <div><span class="detail-stars">${stars}</span> <span>${Math.floor(Math.random()*10000+1000)} ratings</span></div>
+                <div class="detail-price">$${(product.price || 0).toFixed(2)} ${product.originalPrice ? `<span class="detail-original-price">$${product.originalPrice.toFixed(2)}</span>` : ''}</div>
+                <div class="detail-stock detail-stock-in">${isInStock ? '✓ In Stock' : '✗ Out of Stock'}</div>
+                <div class="detail-description"><strong>About this item:</strong><br>${product.description || 'No description available.'}</div>
+                ${isInStock ? `<div class="detail-quantity"><span>Quantity:</span><select id="detailQuantity"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></div>` : ''}
                 <div class="detail-buttons">
-                    <button class="btn-detail-add" onclick="addToCartFromDetail()">Add to Cart</button>
-                    <button class="btn-detail-buy" onclick="buyNow()">Buy Now</button>
+                    <button class="btn-detail-add" onclick="${isInStock ? 'addToCartFromDetail()' : ''}">Add to Cart</button>
+                    <button class="btn-detail-buy" onclick="${isInStock ? 'buyNow()' : ''}">Buy Now</button>
                 </div>
-            </div>
-        `;
+            </div>`;
         document.getElementById('productDetailModal').style.display = 'flex';
     }
     
     function closeProductDetail() { document.getElementById('productDetailModal').style.display = 'none'; selectedProduct = null; }
-    
-    function addToCartFromDetail() {
-        if (!selectedProduct) return;
-        if (selectedProduct.inStock !== true) { showToast('Out of stock'); return; }
-        const qty = parseInt(document.getElementById('detailQuantity')?.value || 1);
-        addToCart(selectedProduct.id, qty);
-        closeProductDetail();
-    }
-    
-    function buyNow() {
-        if (!selectedProduct) return;
-        if (selectedProduct.inStock !== true) { showToast('Out of stock'); return; }
-        const qty = parseInt(document.getElementById('detailQuantity')?.value || 1);
-        addToCart(selectedProduct.id, qty);
-        closeProductDetail();
-        setTimeout(() => openCart(), 500);
-    }
-    
-    function searchProducts() {
-        const term = document.getElementById('searchInput').value.toLowerCase();
-        const filtered = term ? products.filter(p => p.name.toLowerCase().includes(term)) : products;
-        displayProducts(filtered);
-        if(term) showToast(`Found ${filtered.length} products`);
-    }
+    function addToCartFromDetail() { if(selectedProduct && selectedProduct.inStock===true) addToCart(selectedProduct.id, parseInt(document.getElementById('detailQuantity')?.value||1)); closeProductDetail(); }
+    function buyNow() { if(selectedProduct && selectedProduct.inStock===true) { addToCart(selectedProduct.id, parseInt(document.getElementById('detailQuantity')?.value||1)); closeProductDetail(); setTimeout(() => openCart(), 500); } }
+    function searchProducts() { const term = document.getElementById('searchInput').value.toLowerCase(); displayProducts(term ? products.filter(p => p.name.toLowerCase().includes(term)) : products); if(term) showToast(`Found ${products.filter(p=>p.name.toLowerCase().includes(term)).length} products`); }
     
     async function addToCart(productId, qty = 1) {
         if (!currentUser) { showToast('Please login first'); openAuthModal(); return; }
@@ -1219,9 +1123,8 @@
         try {
             const cartDoc = await db.collection('carts').doc(currentUser.uid).get();
             const items = cartDoc.exists ? cartDoc.data().items || [] : [];
-            const total = items.reduce((sum, i) => sum + i.quantity, 0);
-            document.getElementById('cartCount').textContent = total;
-        } catch(e) { console.error(e); }
+            document.getElementById('cartCount').textContent = items.reduce((s,i) => s + i.quantity, 0);
+        } catch(e) {}
     }
     
     async function openCart() {
@@ -1279,19 +1182,6 @@
     
     function closeCart() { document.getElementById('cartModal').style.display = 'none'; }
     
-    auth.onAuthStateChanged(async (user) => {
-        currentUser = user;
-        if (user) {
-            await updateCartCount();
-            await db.collection('users').doc(user.uid).set({ email: user.email, lastActive: new Date() }, { merge: true });
-            const snapshot = await db.collection('users').get();
-            document.getElementById('userCount').textContent = snapshot.size;
-        } else {
-            document.getElementById('cartCount').textContent = '0';
-        }
-        updateUserDropdown();
-    });
-    
     window.onclick = function(event) {
         if (event.target === document.getElementById('cartModal')) closeCart();
         if (event.target === document.getElementById('productDetailModal')) closeProductDetail();
@@ -1299,7 +1189,6 @@
     };
     
     document.getElementById('searchInput').addEventListener('keypress', (e) => { if(e.key === 'Enter') searchProducts(); });
-    
     loadProducts();
 </script>
 </body>
