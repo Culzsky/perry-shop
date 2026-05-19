@@ -98,7 +98,7 @@
             font-weight: bold;
         }
 
-        /* Account Dropdown Menu */
+        /* Account Dropdown Menu - FIXED VISIBILITY */
         .account-dropdown {
             position: absolute;
             top: 45px;
@@ -159,6 +159,30 @@
         .signout-item {
             color: #c00;
             border-top: 1px solid #eee;
+        }
+
+        /* FIX - Make sure ALL dropdown text is visible */
+        .account-dropdown,
+        .account-dropdown * {
+            color: #111 !important;
+        }
+
+        .dropdown-item {
+            color: #111 !important;
+            background: white !important;
+        }
+
+        .dropdown-item .icon {
+            color: #111 !important;
+        }
+
+        .signout-item {
+            color: #c00 !important;
+        }
+
+        .dropdown-header .user-name,
+        .dropdown-header .user-email {
+            color: #111 !important;
         }
 
         .container {
@@ -611,9 +635,7 @@
             background: #ffa41c;
         }
 
-        /* ============================================ */
-        /* MOBILE FIX FOR LOGIN MODAL - ADDED */
-        /* ============================================ */
+        /* Mobile Fix */
         @media (max-width: 768px) {
             .detail-grid {
                 grid-template-columns: 1fr;
