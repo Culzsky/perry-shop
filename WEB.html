@@ -98,28 +98,33 @@
             font-weight: bold;
         }
 
-        /* Account Dropdown Menu - FIXED VISIBILITY */
+        /* Account Dropdown Menu - COMPLETELY FIXED */
+        .user-icon {
+            position: relative;
+        }
+
         .account-dropdown {
             position: absolute;
-            top: 45px;
+            top: 100%;
             right: 0;
             background: white;
             min-width: 280px;
             border-radius: 12px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-            z-index: 1000;
+            z-index: 9999;
             display: none;
-            overflow: hidden;
+            overflow: visible;
         }
 
         .account-dropdown.show {
-            display: block;
+            display: block !important;
         }
 
         .dropdown-header {
             padding: 16px;
             background: #f7f7f7;
             border-bottom: 1px solid #eee;
+            border-radius: 12px 12px 0 0;
         }
 
         .dropdown-header .user-email {
@@ -145,6 +150,7 @@
             border-bottom: 1px solid #f0f0f0;
             color: #111;
             font-size: 14px;
+            background: white;
         }
 
         .dropdown-item:hover {
@@ -159,30 +165,7 @@
         .signout-item {
             color: #c00;
             border-top: 1px solid #eee;
-        }
-
-        /* FIX - Make sure ALL dropdown text is visible */
-        .account-dropdown,
-        .account-dropdown * {
-            color: #111 !important;
-        }
-
-        .dropdown-item {
-            color: #111 !important;
-            background: white !important;
-        }
-
-        .dropdown-item .icon {
-            color: #111 !important;
-        }
-
-        .signout-item {
-            color: #c00 !important;
-        }
-
-        .dropdown-header .user-name,
-        .dropdown-header .user-email {
-            color: #111 !important;
+            border-radius: 0 0 12px 12px;
         }
 
         .container {
@@ -686,27 +669,8 @@
             }
             
             .account-dropdown {
-                right: -20px;
-                min-width: 260px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .amazon-auth-card {
-                max-height: 90vh;
-            }
-            
-            .amazon-auth-inner {
-                padding: 12px 16px;
-            }
-            
-            .amazon-auth-title {
-                font-size: 22px;
-            }
-            
-            .amazon-input-group input {
-                padding: 10px;
-                font-size: 14px;
+                right: -10px;
+                min-width: 250px;
             }
         }
 
